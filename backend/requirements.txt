@@ -1,0 +1,11 @@
+# Backend TechSecure — Django + DRF + JWT + CORS
+# MySQL: en Windows suele fallar mysqlclient sin compilador; se usa PyMySQL
+# (ver settings.py: pymysql.install_as_MySQLdb()). Opcionalmente puedes
+# intentar: pip install mysqlclient  y quitar PyMySQL si tu entorno lo soporta.
+Django>=5.1,<6
+djangorestframework>=3.15,<4
+djangorestframework-simplejwt>=5.3,<6
+django-cors-headers>=4.6,<5
+PyMySQL>=1.1,<2
+python-dotenv>=1.0,<2
+requests>=2.32,<3

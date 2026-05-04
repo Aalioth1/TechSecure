@@ -1,0 +1,60 @@
+<section class="auth-shell">
+  <aside class="auth-shell__brand" aria-label="Marca TechSecure">
+    <app-branding-panel />
+  </aside>
+
+  <div class="auth-shell__form">
+    <mat-card class="auth-card">
+      <mat-card-header>
+        <mat-card-title>Inicio de sesión</mat-card-title>
+        <mat-card-subtitle>Ingresa tus credenciales para continuar</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" autocomplete="username" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              autocomplete="current-password"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="hidePassword() ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            >
+              <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          @if (errorMessage()) {
+            <p class="error">{{ errorMessage() }}</p>
+          }
+
+          <button
+            mat-flat-button
+            color="primary"
+            class="submit-btn"
+            type="submit"
+            [disabled]="loading()"
+          >
+            Ingresar
+          </button>
+
+          <a routerLink="/registro" class="register-link">Registrarse</a>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <p class="auth-footer">© TechSecure Ltda.</p>
+  </div>
+</section>

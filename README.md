@@ -1,147 +1,133 @@
-#  Sistema de Autenticación de Usuarios - TechSecure Ltda.
+# Sistema de Autenticación de Usuarios - TechSecure Ltda.
 
-##  Descripción
-Este proyecto consiste en el desarrollo de un sistema de autenticación de usuarios para una plataforma web, cuyo objetivo es mejorar la seguridad y control de accesos dentro de la empresa TechSecure Ltda.
+## Descripción
+Proyecto académico que implementa un sistema de autenticación de usuarios para una plataforma web, con foco en seguridad y control de accesos por roles para la empresa TechSecure Ltda.
 
-El sistema permite el registro de usuarios, inicio de sesión, validación de credenciales y gestión de accesos según roles.
+El sistema permite registro de usuarios, inicio y cierre de sesión, validación de credenciales y gestión de accesos según roles.
 
 ---
 
-##  Objetivo
+## Objetivo
 Desarrollar una solución segura y eficiente que permita gestionar el acceso de usuarios a una plataforma web mediante mecanismos de autenticación.
 
 ---
 
-##  Metodología
-El proyecto se desarrolla utilizando la metodología ágil Scrum, organizando el trabajo en Sprint iterativos, gestionados mediante Product Backlog, Sprint Backlog y herramientas como Trello.
+## Metodología
+Scrum, organizando el trabajo en sprints iterativos con Product Backlog y Sprint Backlog gestionados en Trello.
 
 ---
 
-##  Arquitectura del sistema
+## Arquitectura del sistema
 
-El sistema se basa en una arquitectura en capas:
+Arquitectura en capas con frontend y backend desacoplados, comunicados por API REST con JWT.
 
-###  Capa de Presentación (Front-end)
-Interfaz de usuario desarrollada con HTML, CSS, JavaScript (Angular/Ionic), incluyendo vistas de:
-- Login
-- Registro
+### Capa de Presentación (Frontend)
+- Angular 20, Angular Material 20 + **Angular CDK**, **Reactive Forms**, SCSS.
+- **RxJS**, TypeScript, **Zone.js** .
+- Vistas: login, registro y panel de administración.
 
-Se consideran criterios de usabilidad y accesibilidad definidos en la Definition of Done.
+### Capa de Negocio (Backend)
+- Python + **Django 5.x** + **Django REST Framework** + **SimpleJWT** + **django-cors-headers**.
+- Variables de entorno con **python-dotenv**; cliente HTTP **requests** (p. ej. servicios externos).
+- Encripta contraseñas con el sistema de hashing nativo de Django.
+- Expone API REST: autenticación JWT, registro de usuarios y extensión para gestión de usuarios.
 
-###  Capa de Negocio (Back-end)
-Implementada en Python (Flask/Django), encargada de:
-- Validación de credenciales
-- Autenticación de usuarios
-- Control de accesos
-- Encriptación de contraseñas
+### Capa de Datos
+- SQLite por defecto rápido para desarrollo.
 
-###  Capa de Datos
-Base de datos MySQL para almacenamiento de:
-- Usuarios
-- Credenciales
-- Permisos
 
 ---
 
-##  Funcionalidades principales
+## Cómo levantar el proyecto
 
-- Registro de usuarios
-- Inicio de sesión
-- Cierre de sesión
-- Validación de credenciales
-- Control de accesos
-- Gestión de usuarios
+### 1. Backend (Django)
 
----
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+copy .env.example .env
+python manage.py migrate
+python manage.py createsuperuser   # opcional, para acceder al admin
+python manage.py runserver
+```
 
-##  Tecnologías utilizadas
+El backend queda disponible en `http://localhost:8000`.
 
-- Backend: Python
-- Frontend: JavaScript, HTML5, SCSS
-- Framework: Angular, Ionic
-- Base de datos: MySQL
-- Control de versiones: GitHub
-- Gestión ágil: Trello
+Endpoints relevantes:
+- `/admin/usuarios/usuario/` - lista de usuarios.
+- `/admin/` — panel de Django.
 
----
+### 2. Frontend (Angular)
 
-##  Implementación
+```powershell
+cd frontend
+npm install
+npx ng serve
+```
 
-El sistema está diseñado para ser desplegado en:
+El frontend queda en `http://localhost:4200` y consume el API en `http://localhost:8000/api` (configurable en `src/environments/`).
 
-- Servidor VPS
-- Servicios en la nube (AWS)
-- Servidor web (Nginx/Apache)
+### 3. Pruebas end-to-end (Playwright)
 
----
+Pruebas funcionales del frontend (cargan `ng serve` automáticamente):
 
-##  Avance del proyecto
-
-### ✔ Sprint 1 - Planificación
-- Definición de épicas
-- Creación de historias de usuario
-- Product Backlog
-- Roadmap inicial
-
-### ✔ Sprint 2 - Análisis
-- Refinamiento de backlog
-- Definición de tecnologías
-- Estructura del sistema
-
-### ✔ Sprint 3 - Diseño
-- Prototipo front-end (login y registro)
-- Diagramas UML:
-  - Caso de uso
-  - Actividad
-  - Clases
-  - Componentes
-- Definición de arquitectura en capas
-
-###  Sprint 4 - En desarrollo
-- Implementación backend
-- Integración con base de datos
-- Desarrollo login funcional
+```powershell
+cd frontend
+npm run e2e:install   # solo la primera vez (descarga Chromium)
+npm run e2e           # ejecuta las pruebas
+npm run e2e:ui        # modo UI interactiva
+```
 
 ---
 
-##  Metodología Scrum
+## Funcionalidades principales
 
-### Épicas
-- Épica 0: Configuración del entorno
-- Épica 1: Autenticación
-- Épica 2: Gestión de usuarios
-- Épica 3: Seguridad
-- Épica 4: Diseño y modelamiento
-- Épica 5: Arquitectura
-
-### Artefactos Scrum
-- Product Backlog
-- Sprint Backlog
-- Roadmap
-- Project Burndown
+- Registro de usuarios.
+- Inicio y cierre de sesión con JWT.
+- Validación de credenciales.
+- Control de accesos basado en roles (`admin`, `usuario`).
+- Gestión de usuarios desde el panel administrador.
 
 ---
 
-##  Organización del trabajo
+## Tecnologías
 
-Gestión mediante Trello con flujo:
-
-- Por hacer
-- Haciendo
-- Sprint Review
-- Hecho
-
----
-
-##  Integrantes
-
-- Moisés Martínez  
-- Estefanía Neira  
+- **Backend:** Python **3.11+** (compatible con Django 5.x; en desarrollo se ha usado p. ej. 3.13), **Django 5.x**, **Django REST Framework**, **djangorestframework-simplejwt**, **django-cors-headers**, **PyMySQL** (driver MySQL en Windows), **python-dotenv**, **requests**.
+- **Frontend:** **Angular 20.x**, **Angular Material 20.x**, **Angular CDK 20.x**, **@angular/animations**, **RxJS** 7.8, **TypeScript**, **SCSS**, componentes standalone. **Pruebas:** Karma + Jasmine (unit), **Playwright** (e2e).
+- **Base de datos:** SQLite (desarrollo por defecto), MySQL (opcional, `USE_MYSQL=true` en `.env`).
+- **Control de versiones:** Git / GitHub.
+- **Gestión ágil:** Trello.
 
 ---
 
-##  Estado del proyecto
+## Avance del proyecto
 
- En desarrollo (fase de implementación)
+- ✔ Sprint 1 - Planificación (épicas, historias, Product Backlog, Roadmap).
+- ✔ Sprint 2 - Análisis (refinamiento, definición de tecnologías).
+- ✔ Sprint 3 - Diseño (prototipos de login y registro, diagramas UML, arquitectura en capas).
+- ◔ Sprint 4 - Implementación (en curso): scaffolding monorepo, modelo de usuario, JWT, esqueleto de pantallas.
 
- ---
+---
+
+## Épicas
+
+- Épica 0: Configuración del entorno.
+- Épica 1: Autenticación.
+- Épica 2: Gestión de usuarios.
+- Épica 3: Seguridad.
+- Épica 4: Diseño y modelamiento.
+- Épica 5: Arquitectura.
+
+---
+
+## Integrantes
+
+- Moisés Martínez
+- Estefanía Neira
+
+---
+
+## Estado del proyecto
+En desarrollo (fase de implementación).
