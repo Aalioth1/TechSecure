@@ -25,7 +25,7 @@ class RegistroSerializer(serializers.ModelSerializer):
             "fecha_nacimiento",
         )
         extra_kwargs = {
-            "email": {"required": False, "allow_blank": True},
+            "email": {"required": True, "allow_blank": False},
             "telefono": {"required": False, "allow_blank": True},
             "fecha_nacimiento": {"required": False, "allow_null": True},
         }
@@ -38,6 +38,14 @@ class RegistroSerializer(serializers.ModelSerializer):
             )
         return value
 
+    def validate_email(self, value: str) -> str:
+        value = value.strip().lower()
+        if Usuario.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError(
+                "Ya existe una cuenta registrada con este correo."
+            )
+        return value
+
     def validate_password(self, value: str) -> str:
         validate_password(value)
         return value
@@ -45,7 +53,7 @@ class RegistroSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop("password")
         username = validated_data.pop("username")
-        email = validated_data.pop("email", "") or None
+        email = validated_data.pop("email")
         return Usuario.objects.create_user(
             username,
             email=email,

@@ -48,6 +48,11 @@
   color: #607d8b;
 }
 
+.login-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -69,6 +74,15 @@
 .error {
   color: var(--mat-sys-error);
   margin: 0;
+}
+
+.success {
+  color: #1b5e20;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #e8f5e9;
+  font-size: 0.925rem;
 }
 
 /* Escritorio: marca | formulario */

@@ -3,9 +3,11 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-interface TokenResponse {
+export interface TokenResponse {
   access: string;
   refresh: string;
+  is_staff?: boolean;
+  groups?: string[];
 }
 
 interface LoginPayload {
@@ -16,6 +18,7 @@ interface LoginPayload {
 interface RegisterPayload {
   username: string;
   password: string;
+  email: string;
   first_name: string;
   last_name: string;
   telefono?: string;
@@ -41,9 +44,15 @@ export class AuthService {
   }
 
   login(payload: LoginPayload): Observable<TokenResponse> {
-    return this.http
-      .post<TokenResponse>(`${this.api}/token/`, payload)
-      .pipe(tap((res) => this.persistTokens(res)));
+    return this.http.post<TokenResponse>(`${this.api}/token/`, payload).pipe(
+      tap((res) => {
+        if (res.is_staff === true) {
+          this.persistTokens(res);
+        } else {
+          this.logout();
+        }
+      }),
+    );
   }
 
   register(payload: RegisterPayload): Observable<unknown> {
