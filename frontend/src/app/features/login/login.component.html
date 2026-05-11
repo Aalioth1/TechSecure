@@ -10,7 +10,7 @@
         <mat-card-subtitle>Ingresa tus credenciales para continuar</mat-card-subtitle>
       </mat-card-header>
 
-      <mat-card-content>
+      <mat-card-content class="login-card-content">
         <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
           <mat-form-field appearance="outline">
             <mat-label>Usuario</mat-label>
@@ -40,6 +40,10 @@
             <p class="error">{{ errorMessage() }}</p>
           }
 
+          @if (successMessage()) {
+            <p class="success" role="status">{{ successMessage() }}</p>
+          }
+
           <button
             mat-flat-button
             color="primary"
@@ -49,9 +53,17 @@
           >
             Ingresar
           </button>
-
-          <a routerLink="/registro" class="register-link">Registrarse</a>
         </form>
+
+        <button
+          type="button"
+          mat-button
+          color="primary"
+          class="register-link"
+          (click)="navigateToRegister()"
+        >
+          Registrarse
+        </button>
       </mat-card-content>
     </mat-card>
 

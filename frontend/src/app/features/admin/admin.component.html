@@ -9,25 +9,14 @@
       />
     </div>
     <mat-nav-list>
-      <a mat-list-item>
-        <mat-icon matListItemIcon>dashboard</mat-icon>
-        <span matListItemTitle>Dashboard</span>
-      </a>
-      <a mat-list-item>
-        <mat-icon matListItemIcon>calendar_month</mat-icon>
-        <span matListItemTitle>Agenda mensual</span>
-      </a>
-      <a mat-list-item>
-        <mat-icon matListItemIcon>person_add</mat-icon>
-        <span matListItemTitle>Registro de usuarios</span>
-      </a>
-      <a mat-list-item>
-        <mat-icon matListItemIcon>mail</mat-icon>
-        <span matListItemTitle>Mensajes</span>
-      </a>
-      <a mat-list-item>
-        <mat-icon matListItemIcon>group</mat-icon>
-        <span matListItemTitle>Gestión de usuarios</span>
+      <a
+        mat-list-item
+        *ngFor="let item of menuItems"
+        [class.is-active]="selectedSection === item.key"
+        (click)="selectSection(item.key)"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -42,8 +31,34 @@
     </mat-toolbar>
 
     <main class="admin-content">
-      <h2>Gestión de usuarios</h2>
-      <p>Listado y formulario de edición pendientes de implementar (siguiente sprint).</p>
+      <section class="section-panel">
+        <div class="section-panel__header">
+          <h2>{{ sectionContent[selectedSection].title }}</h2>
+          <p>{{ sectionContent[selectedSection].description }}</p>
+        </div>
+
+        <div class="section-panel__body">
+          <mat-card class="info-card">
+            <h4>Acciones rapidas</h4>
+            <div class="actions">
+              <button
+                mat-stroked-button
+                color="primary"
+                *ngFor="let action of sectionContent[selectedSection].actions"
+              >
+                {{ action }}
+              </button>
+            </div>
+          </mat-card>
+
+          <mat-card class="info-card">
+            <h4>Pendientes</h4>
+            <ul>
+              <li *ngFor="let task of sectionContent[selectedSection].tasks">{{ task }}</li>
+            </ul>
+          </mat-card>
+        </div>
+      </section>
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -8,6 +8,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { AuthService } from '../../core/auth.service';
 import { BrandingPanelComponent } from '../../shared/branding-panel/branding-panel.component';
@@ -24,6 +25,7 @@ import { BrandingPanelComponent } from '../../shared/branding-panel/branding-pan
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSnackBarModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './registro.component.html',
@@ -33,6 +35,7 @@ export class RegistroComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly hidePassword = signal(true);
   readonly loading = signal(false);
@@ -44,6 +47,7 @@ export class RegistroComponent {
       [Validators.required, Validators.pattern(/^\S+$/)],
     ],
     password: ['', [Validators.required, Validators.minLength(6)]],
+    email: ['', [Validators.required, Validators.email]],
     first_name: ['', [Validators.required]],
     last_name: ['', [Validators.required]],
     telefono: [''],
@@ -66,6 +70,7 @@ export class RegistroComponent {
     const payload = {
       username: raw.username,
       password: raw.password,
+      email: raw.email.trim().toLowerCase(),
       first_name: raw.first_name,
       last_name: raw.last_name,
       telefono: raw.telefono,
@@ -75,7 +80,18 @@ export class RegistroComponent {
     };
 
     this.auth.register(payload).subscribe({
-      next: () => this.router.navigate(['/login']),
+      next: () => {
+        this.snackBar.open(
+          'Tu cuenta se creó correctamente. Ya puedes iniciar sesión.',
+          'Entendido',
+          {
+            duration: 6000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+          },
+        );
+        void this.router.navigate(['/login']);
+      },
       error: (err: unknown) => {
         const msg = this.formatRegisterError(err);
         console.error('[Registro] fallo', err);

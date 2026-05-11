@@ -3,13 +3,14 @@ import { test, expect } from '@playwright/test';
 test.describe('Registro (smoke)', () => {
   test('navegación login -> registro y campos visibles', async ({ page }) => {
     await page.goto('/login');
-    await page.getByRole('link', { name: /Registrarse/i }).click();
+    await page.getByRole('button', { name: /Registrarse/i }).click();
 
     await expect(page).toHaveURL(/\/registro$/);
     await expect(page.getByText(/Crear cuenta TechSecure/i)).toBeVisible();
 
     for (const name of [
       'Usuario',
+      'Correo electrónico',
       'Nombre',
       'Apellido',
       'Teléfono',
